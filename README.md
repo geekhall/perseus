@@ -1,2 +1,2 @@
-# perseus
-Perseus Project Manager 
+# Perseus
+Perseus Project Manager
