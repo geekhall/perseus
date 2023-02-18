@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "swagger.group-name",
+      "type": "java.lang.String",
+      "description": "description of group name."
+    }
+] }
