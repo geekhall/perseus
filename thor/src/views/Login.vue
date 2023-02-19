@@ -25,7 +25,9 @@
         <div class="login-btn">
           <el-button type="primary" @click="submitForm(login)">登录</el-button>
         </div>
-        <p class="login-tips">Tips : 用户名和密码随便填。</p>
+        <p class="login-tips">
+          <span>没有账号？</span> <router-link to="/register">立即注册</router-link>
+        </p>
       </el-form>
     </div>
   </div>
@@ -39,6 +41,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
+import axios from 'axios'
 
 interface LoginInfo {
   username: string
@@ -47,10 +50,10 @@ interface LoginInfo {
 
 const router = useRouter()
 const param = reactive<LoginInfo>({
-  username: 'admin',
-  password: '123123'
+  username: 'test001',
+  password: '123456'
 })
-
+const loginSuccess = ref(false)
 const rules: FormRules = {
   username: [
     {
@@ -61,18 +64,47 @@ const rules: FormRules = {
   ],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 }
+const asyncLogin = async () => {
+  const result = await axios({
+    method: 'POST',
+    url: '/api/auth/login',
+    data: {
+      username: param.username,
+      password: param.password
+    }
+  })
+    .then((res: any) => {
+      console.log(res.data)
+      console.log('Test2:@@@' + JSON.stringify(res.data))
+      // envs.value = JSON.parse(JSON.stringify(res.data))
+      loginSuccess.value = JSON.parse(JSON.stringify(res.data))
+      // console.log('Test2:@@@: envs=' + JSON.stringify(envs))
+      return true
+    })
+    .catch((err: any) => {
+      console.log(err.message)
+      return false
+    })
+}
+
 const permission = usePermissionStore()
 const login = ref<FormInstance>()
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid: boolean) => {
     if (valid) {
-      ElMessage.success('登录成功')
-      localStorage.setItem('ms_username', param.username)
-      const keys = permission.defaultList[param.username == 'admin' ? 'admin' : 'user']
-      permission.handleSet(keys)
-      localStorage.setItem('ms_keys', JSON.stringify(keys))
-      router.push('/')
+      asyncLogin()
+      if (!loginSuccess.value) {
+        ElMessage.error('登录失败')
+        return false
+      } else {
+        ElMessage.success('登录成功')
+        localStorage.setItem('ms_username', param.username)
+        const keys = permission.defaultList[param.username == 'admin' ? 'admin' : 'user']
+        permission.handleSet(keys)
+        localStorage.setItem('ms_keys', JSON.stringify(keys))
+        router.push('/')
+      }
     } else {
       ElMessage.error('登录成功')
       return false

@@ -15,6 +15,7 @@ const UnoCssSample = () => import('../views/UnoCssSample.vue')
 const IconSample = () => import('../views/IconSample.vue')
 const SvgSample = () => import('../views/SvgSample.vue')
 const Login = () => import('../views/Login.vue')
+const Register = () => import('../views/Register.vue')
 const NoPermission = () => import('../views/403.vue')
 const Donate = () => import('../views/Donate.vue')
 const Charts = () => import('../views/Charts.vue')
@@ -162,6 +163,11 @@ const routes: RouteRecordRaw[] = [
     component: Login
   },
   {
+    path: '/register', name: "register",
+    meta: { title: '注册' },
+    component: Register
+  },
+  {
     path: '/403', name: "403",
     meta: { title: '没有权限' },
     component: NoPermission
@@ -188,8 +194,13 @@ router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Thor-System`
   const role = localStorage.getItem('ms_username')
   const permission = usePermissionStore();
-  if (!role && to.path !== '/login') {
-    next('/login')
+  if (!role && to.path !== '/login' && to.path !== '/register') {
+    // no login, redirect to login page.
+    if (to.path === '/register') {
+      next()
+    } else {
+      next('/login')
+    }
   } else if (to.meta.permission && !permission.key.includes(to.meta.permission)) {
     // no permission, redirect to 403 page.
     next('/403')

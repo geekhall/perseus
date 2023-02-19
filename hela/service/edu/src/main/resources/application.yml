@@ -1,0 +1,91 @@
+server:
+  port: 8888        # 服务端口
+
+# Spring配置
+spring:
+  application:
+    name: edu       # 服务名，给SpringCloud使用
+  # 环境设置：dev、test、prod
+  profiles:
+    active: dev     # 环境设置
+  # MySQL数据库连接
+  datasource:
+    url: jdbc:mysql://localhost:3316/olympians?userUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.mysql.cj.jdbc.MysqlConnectionPoolDataSource
+    username: zeus
+    password: yy123456
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  mvc:
+    pathmatch:
+      # Failed to start bean 'documentationPluginsBootstrapper' in spring data rest
+      # springfox3.0.0 has compatibility problem with spring boot 2.6.x
+      matching-strategy: ant_path_matcher # to resolve spring fox null pointer problem
+
+
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted # 全局逻辑删除的实体字段名（since 3.3.0，配置后实体bean类可以不配置@TableLogic注解）
+      logic-delete-value: 1       # 逻辑已删除值（默认为1）
+      logic-not-delete-value: 0   # 逻辑未删除值（默认为0）
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # Mybatis日志
+
+
+# ===== 自定义swagger配置 ===== #
+swagger:
+  enable: true     # 配置是否启用Swagger
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger 3.0整合Demo
+  try-host: http://localhost:${server.port}
+  group-name: edu
+
+logging:
+  # 日志级别设置
+  level:
+    root: info   # 修改默认的日志级别，默认INFO，  TRACE < DEBUG < INFO < WARN < ERROR， SpringBoot还可以额外设置两个FATAL和OFF
+    cn.geekhall.hela.server.controller: info # 设置某个包下面的日志级别。
+  # 日志文件配置
+  file:
+    path: ./log                 # 日志文件所在位置
+    name: ./log/hela_test.log   # 日志文件名以及路径（默认项目根路径，文件名默认为 spring.log) ，与path同时指定时只有name生效
+  # 日志格式配置
+  # %d ：表示日期时间，
+  # %thread ：表示线程名，
+  # %-5level ：级别从左显示5个字符宽度
+  # %logger{50} ：表示logger名字最长50个字符，否则按照句点分割。
+  # %msg ：日志消息，
+  # %n ：是换行符
+  # 2022-03-28 16:34:30.871  WARN 2562 --- [           main] d.s.r.o.OperationImplicitParameterReader : Unable to interpret the implicit parameter configuration with dataType: Long, dataTypeClass: class java.lang.Void
+  # 2022-03-28 16:34:30.871  WARN 2562 --- [           main] d.s.r.o.OperationImplicitParameterReader : Unable to interpret the implicit parameter configuration with dataType: , dataTypeClass: class java.lang.Void
+  # 2022-03-28 16:34:30.897  INFO 2562 --- [           main] c.g.hela.server.ServerApplication        : Started ServerApplication in 4.125 seconds (JVM running for 4.667)
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} -- [%thread] -- %-5level -- %logger{50} -- %msg%n' # 控制台输出格式
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} == [%thread] == %-5level == %logger{50} == %msg%n'    # 文件输出格式
+
+
+# ===== APP 自定义配置 ===== #
+hela:
+  # 服务端口
+  server:
+    port: 8888
+  # 服务名
+  application:
+    name: edu
+  # 服务版本
+  application-version: 1.0
+  # 服务描述
+  application-description: edu service
+  # 服务地址
+  try-host: http://localhost:${server.port}
+  # 服务分组
+  group-name: edu
+  app:
+    jwtCookieName: hela
+    jwtSecret: helaSecretKey
+    jwtExpirationMs: 86400000
