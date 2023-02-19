@@ -3,7 +3,7 @@ package cn.geekhall.auth.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.jws.soap.SOAPBinding;
+//import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
