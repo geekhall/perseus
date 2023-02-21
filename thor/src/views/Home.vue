@@ -17,14 +17,12 @@
 </template>
 
 <script lang="ts" setup>
-import mainStore from '~/store'
 import { useSidebarStore } from '~/store/sidebar'
 import { useTagsStore } from '~/store/tags'
 import TheHeader from '../components/layout/TheHeader.vue'
 import TheSidebar from '../components/layout/TheSidebar.vue'
 import VTags from '~/components/Tags.vue'
 
-const store = mainStore()
 const sidebar = useSidebarStore()
 const tags = useTagsStore()
 </script>

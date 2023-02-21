@@ -211,33 +211,34 @@ const rules: FormRules = {
   ]
 }
 
-const asyncRegister = async () => {
-  const result = await axios({
-    method: 'POST',
-    url: '/api/auth/register',
-    data: {
-      username: param.username,
-      email: param.email,
-      password: param.password,
-      phone: param.phone,
-      chapta: param.chapta,
-      smsChapta: param.smsChapta,
-      idCard: param.idCard
-    }
-  })
-    .then((res: any) => {
-      console.log(res.data)
-      console.log('Test2:@@@' + JSON.stringify(res.data))
-      // envs.value = JSON.parse(JSON.stringify(res.data))
-      isRegisted.value = JSON.parse(JSON.stringify(res.data))
-      // console.log('Test2:@@@: envs=' + JSON.stringify(envs))
-      return true
-    })
-    .catch((err: any) => {
-      console.log(err.message)
-      return false
-    })
-}
+// const asyncRegister = async () => {
+//   const result = await axios({
+//     method: 'POST',
+//     url: '/api/auth/register',
+//     data: {
+//       username: param.username,
+//       email: param.email,
+//       password: param.password,
+//       phone: param.phone,
+//       chapta: param.chapta,
+//       smsChapta: param.smsChapta,
+//       idCard: param.idCard
+//     }
+//   })
+//     .then((res: any) => {
+//       console.log(res.data)
+//       console.log('Test2:@@@' + JSON.stringify(res.data))
+//       // envs.value = JSON.parse(JSON.stringify(res.data))
+//       isRegisted.value = JSON.parse(JSON.stringify(res.data))
+//       // console.log('Test2:@@@: envs=' + JSON.stringify(envs))
+//       return true
+//     })
+//     .catch((err: any) => {
+//       console.log(err.message)
+//       return false
+//     })
+// }
+
 const permission = usePermissionStore()
 const register = ref<FormInstance>()
 
@@ -245,7 +246,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid: boolean) => {
     if (valid) {
-      asyncRegister()
+      // asyncRegister()
       if (!isRegisted.value) {
         ElMessage.error('注册失败')
         return false

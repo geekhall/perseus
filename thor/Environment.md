@@ -393,16 +393,16 @@ server: {
 在组件或者ts中使用Axios：
 
 ```ts
-export const getHeraData = (api_url: string) => {
+export const getHelaData = (api_url: string, api_method: MethodType ) => {
   return request({
     url: api_url,
-    method: MethodType.GET
+    method: api_method
   } as AxiosRequestConfig)
 }
 
 // 获取表格数据
 const getData = () => {
-  getHeraData('/teacher/all')
+  getHelaData('/teacher/all', MethodType.GET)
     .then((res) => {
       tableData.value = res.data.items
       pageTotal.value = res.data.pageTotal || 50

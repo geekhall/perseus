@@ -199,7 +199,8 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/register') {
       next()
     } else {
-      next('/login')
+      // next('/login')
+      next()
     }
   } else if (to.meta.permission && !permission.key.includes(to.meta.permission)) {
     // no permission, redirect to 403 page.

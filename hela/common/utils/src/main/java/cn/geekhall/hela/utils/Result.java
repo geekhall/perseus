@@ -2,6 +2,7 @@ package cn.geekhall.hela.utils;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.HashMap;

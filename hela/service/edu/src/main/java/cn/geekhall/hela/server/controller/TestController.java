@@ -15,8 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-        @RequestMapping("/hello")
+        @RequestMapping("/all")
         public String hello(){
-            return "hello";
+            return "public content";
+        }
+
+        @RequestMapping("/user")
+        public String user() {
+            return "user content";
+        }
+
+        @RequestMapping("/mod")
+        public String moderator() {
+            return "moderator content";
+        }
+
+        @RequestMapping("/admin")
+        public String admin() {
+            return "admin content";
         }
 }

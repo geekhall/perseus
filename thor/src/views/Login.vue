@@ -6,7 +6,9 @@
         <el-form-item prop="username">
           <el-input v-model="param.username" placeholder="username">
             <template #prepend>
-              <el-button :icon="User"></el-button>
+              <el-button tabindex="-1">
+                <el-icon><User /></el-icon>
+              </el-button>
             </template>
           </el-input>
         </el-form-item>
@@ -18,7 +20,9 @@
             @keyup.enter="submitForm(login)"
           >
             <template #prepend>
-              <el-button :icon="Lock"></el-button>
+              <el-button tabindex="-1">
+                <el-icon><Lock /></el-icon>
+              </el-button>
             </template>
           </el-input>
         </el-form-item>
@@ -34,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useTagsStore } from '../store/tags'
 import { usePermissionStore } from '../store/permission'
 import { useRouter } from 'vue-router'
@@ -42,18 +46,57 @@ import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
 import axios from 'axios'
+import UserModel from '~/models/user'
+import { useUserStore } from '~/store/auth'
+import authHeader from '~/services/auth-header'
+import authService from '~/services/auth-service'
 
-interface LoginInfo {
-  username: string
-  password: string
+const userStore = useUserStore()
+const loading = ref(false)
+const message = ref('')
+const loggedIn = computed(() => {
+  return userStore.status.loggedIn
+})
+
+onMounted(() => {
+  if (loggedIn.value) {
+    router.push('/dashboard')
+  }
+})
+
+const handleLogin = async () => {
+  loading.value = true
+  const user = new UserModel()
+  user.username = param.username
+  user.password = param.password
+  return authService
+    .login(user)
+    .then(
+      (data) => {
+        userStore.status.loggedIn = true
+        userStore.user = data
+        router.push('/dashboard')
+        loading.value = false
+        return Promise.resolve()
+      },
+      (error) => {
+        message.value = error
+        loading.value = false
+        return Promise.reject()
+      }
+    )
+    .catch((error) => {
+      message.value = error
+      loading.value = false
+      return Promise.reject()
+    })
 }
 
 const router = useRouter()
-const param = reactive<LoginInfo>({
-  username: 'test001',
+const param = reactive<UserModel>({
+  username: 'test0011',
   password: '123456'
 })
-const loginSuccess = ref(false)
 const rules: FormRules = {
   username: [
     {
@@ -64,28 +107,6 @@ const rules: FormRules = {
   ],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 }
-const asyncLogin = async () => {
-  const result = await axios({
-    method: 'POST',
-    url: '/api/auth/login',
-    data: {
-      username: param.username,
-      password: param.password
-    }
-  })
-    .then((res: any) => {
-      console.log(res.data)
-      console.log('Test2:@@@' + JSON.stringify(res.data))
-      // envs.value = JSON.parse(JSON.stringify(res.data))
-      loginSuccess.value = JSON.parse(JSON.stringify(res.data))
-      // console.log('Test2:@@@: envs=' + JSON.stringify(envs))
-      return true
-    })
-    .catch((err: any) => {
-      console.log(err.message)
-      return false
-    })
-}
 
 const permission = usePermissionStore()
 const login = ref<FormInstance>()
@@ -93,20 +114,22 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid: boolean) => {
     if (valid) {
-      asyncLogin()
-      if (!loginSuccess.value) {
-        ElMessage.error('登录失败')
-        return false
-      } else {
-        ElMessage.success('登录成功')
-        localStorage.setItem('ms_username', param.username)
-        const keys = permission.defaultList[param.username == 'admin' ? 'admin' : 'user']
-        permission.handleSet(keys)
-        localStorage.setItem('ms_keys', JSON.stringify(keys))
-        router.push('/')
-      }
+      console.log('valid ok')
+      handleLogin()
+        .then(() => {
+          ElMessage.success('登录成功')
+          console.log('login success')
+          loading.value = false
+        })
+        .catch(() => {
+          console.log('login error 001')
+          loading.value = false
+          ElMessage.error('登录失败，验证未通过')
+        })
     } else {
-      ElMessage.error('登录成功')
+      console.log('login error 002')
+      ElMessage.error('登录失败，验证未通过')
+      loading.value = false
       return false
     }
   })

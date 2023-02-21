@@ -6,6 +6,7 @@ import cn.geekhall.hela.server.payload.request.RegisterRequest;
 import cn.geekhall.hela.server.payload.response.MessageResponse;
 import cn.geekhall.hela.server.payload.response.UserInfoResponse;
 import cn.geekhall.hela.server.security.services.UserDetailsImpl;
+import cn.geekhall.hela.utils.Result;
 import freemarker.log.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -73,11 +74,26 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-
+//
+//    @PostMapping("/login")
+//    public Result authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+//        System.out.println("login");
+////        User user = userMapper.selectByUsername(loginRequest.getUsername());
+//
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+//
+//        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+//
+//        return Result.ok().data("cookie", jwtCookie.toString()).data("user", new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
+//    }
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         System.out.println("login");
-//        User user = userMapper.selectByUsername(loginRequest.getUsername());
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -92,6 +108,7 @@ public class AuthController {
                 .body(new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
 
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {

@@ -9,13 +9,15 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import mainStore from '~/store'
-const store = mainStore()
+import { useCounterStore } from '~/store/counter'
 
-const cnt = computed(() => store.count)
-const increase = () => store.increment()
-const decrease = () => store.decrement()
+const counter = useCounterStore()
+
+const cnt = computed(() => counter.count)
+const increase = () => counter.increment()
+const decrease = () => counter.decrement()
 </script>
 
 <style lang="less" scoped>

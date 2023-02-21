@@ -104,7 +104,8 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue'
-import { getHeraData } from '../api/index'
+import { getHelaData } from '../api/index'
+import { MethodType } from '~/utils/types'
 
 interface TableItem {
   id: number
@@ -125,7 +126,7 @@ const tableData = ref<TableItem[]>([])
 const pageTotal = ref(0)
 // 获取表格数据
 const getData = () => {
-  getHeraData('/teacher/all')
+  getHelaData('/teacher/all', MethodType.GET)
     .then((res) => {
       tableData.value = res.data.items
       pageTotal.value = res.data.pageTotal || 50

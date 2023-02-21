@@ -3,10 +3,10 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-export default function request(config: AxiosRequestConfig) {
+export default async function request(config: AxiosRequestConfig) {
 
   // 1. 创建 axios 实例
-  const instance = axios.create({
+  const instance = await axios.create({
     baseURL: '/api',
     timeout: 5000,
     headers: {

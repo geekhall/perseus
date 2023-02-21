@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * ExceptionHandler
  *
+ *
  * @author yiny
  * @date 2022/3/28 06:20
  */
-@RestControllerAdvice
+//@RestControllerAdvice // 暂时注释掉，因为会拦截SpringSecurity的ResponseEntity返回
 public class GlobalExceptionHandler {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,6 +32,7 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.error().message("全局异常");
     }
+
 
     /**
      * 特定异常处理
