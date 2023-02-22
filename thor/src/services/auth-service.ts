@@ -20,22 +20,22 @@ class AuthService {
    * @param password
    * @returns
    */
-  login(user: UserModel) {
-    return axios
+  async login(username: string, password: string) {
+    return await axios
       .post(API_URL + "login", {
-        username: user.username,
-        password: user.password
+        username,
+        password
       })
       .then(response => {
         if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data))
+          localStorage.setItem('user', JSON.stringify(response.data))
         }
-        return response.data
+        return Promise.resolve(response.data)
       }).catch(error => {
         console.log("####### auth-service.ts login() error #######");
 
         console.log(error)
-        return error
+        return Promise.reject(error)
       })
   }
 
@@ -44,10 +44,9 @@ class AuthService {
    */
   logout() {
     localStorage.removeItem('user')
-    localStorage.removeItem('token')
     localStorage.removeItem('ms_username')
-    // userStore.status.loggedIn = false
     useUserStore().status.loggedIn = false
+    useUserStore().user = null
   }
 
   /**
@@ -67,10 +66,10 @@ class AuthService {
       if (response.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(response.data))
       }
-      return response.data
+      return Promise.resolve(response.data)
     }).catch(error => {
       console.log(error)
-      return error
+      return Promise.reject(error)
     })
   }
 

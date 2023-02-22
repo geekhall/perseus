@@ -2,20 +2,22 @@ import { defineStore } from 'pinia'
 import UserModel from '~/models/user'
 import authService from '~/services/auth-service'
 
-const user = JSON.parse(localStorage.getItem('user') || '{}')
-const initalState = user
-  ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null }
-
 export const useUserStore = defineStore('user', {
-  state: () => initalState,
+  state: () => {
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
+    const loggedIn = storedUser && storedUser.accessToken
+    return {
+      status: { loggedIn },
+      user: storedUser
+    }
+  },
   getters: {},
   actions: {
     login(username: string, password: string) {
-      return authService.login({ username, password } as UserModel).then(
+      return authService.login(username, password).then(
         (user) => {
           this.user = user
-          user.status = { loggedIn: true }
+          this.status.loggedIn = true
           return Promise.resolve(user)
         },
         (error) => {
@@ -25,9 +27,9 @@ export const useUserStore = defineStore('user', {
       )
     },
     logout() {
-      this.status = { loggedIn: false }
-      authService.logout()
+      this.status.loggedIn = false
       this.user = null
+      this.$reset()
     },
     register(username: string, email: string, password: string) {
       return authService.register({ username, email, password })

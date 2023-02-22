@@ -80,8 +80,6 @@ import { useRouter } from 'vue-router'
 import imgurl from '~/assets/img/avatar.png'
 import { SwitchButton } from '@element-plus/icons-vue'
 import authService from '~/services/auth-service'
-import authHeader from '~/services/auth-header'
-import { useUserStore } from '~/store/auth'
 
 const username: string | null = localStorage.getItem('ms_username')
 const message: number = 2
@@ -106,7 +104,6 @@ const handleCommand = (command: string) => {
   console.log('handleCommand', command)
   if (command == 'loginout') {
     localStorage.removeItem('ms_username')
-    // localStorage.removeItem('ms_token')
     authService.logout()
 
     router.push('/login')

@@ -45,17 +45,17 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
-import axios from 'axios'
 import UserModel from '~/models/user'
 import { useUserStore } from '~/store/auth'
-import authHeader from '~/services/auth-header'
 import authService from '~/services/auth-service'
 
 const userStore = useUserStore()
 const loading = ref(false)
 const message = ref('')
 const loggedIn = computed(() => {
-  return userStore.status.loggedIn
+  console.log('login computed 001: ' + JSON.stringify(userStore))
+  console.log('login computed 001: ' + userStore.status)
+  return userStore.status.loggedIn || false
 })
 
 onMounted(() => {
@@ -66,35 +66,34 @@ onMounted(() => {
 
 const handleLogin = async () => {
   loading.value = true
-  const user = new UserModel()
-  user.username = param.username
-  user.password = param.password
-  return authService
-    .login(user)
+  return await authService
+    .login(param.username, param.password)
     .then(
       (data) => {
         userStore.status.loggedIn = true
         userStore.user = data
         router.push('/dashboard')
         loading.value = false
-        return Promise.resolve()
+        return Promise.resolve(userStore.user)
       },
       (error) => {
         message.value = error
         loading.value = false
-        return Promise.reject()
+        userStore.status.loggedIn = false
+        return Promise.reject(error)
       }
     )
     .catch((error) => {
-      message.value = error
+      console.log('login error 003: ' + error)
       loading.value = false
-      return Promise.reject()
+      userStore.status.loggedIn = false
+      return Promise.reject(error)
     })
 }
 
 const router = useRouter()
 const param = reactive<UserModel>({
-  username: 'test0011',
+  username: 'test001',
   password: '123456'
 })
 const rules: FormRules = {
@@ -120,16 +119,19 @@ const submitForm = (formEl: FormInstance | undefined) => {
           ElMessage.success('登录成功')
           console.log('login success')
           loading.value = false
+          userStore.status.loggedIn = true
         })
         .catch(() => {
           console.log('login error 001')
           loading.value = false
+          userStore.status.loggedIn = false
           ElMessage.error('登录失败，验证未通过')
         })
     } else {
       console.log('login error 002')
       ElMessage.error('登录失败，验证未通过')
       loading.value = false
+      userStore.status.loggedIn = false
       return false
     }
   })
