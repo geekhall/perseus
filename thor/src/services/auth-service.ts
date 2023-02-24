@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
-
 import axios from "axios"
 import UserModel from "~/models/user"
 import { useUserStore } from "~/store/auth"
 
+/**
+ * AuthService
+ *
+ * Axios service for authentication
+ *
+ */
 // const userStore = useUserStore()
 
 const API_URL = "http://localhost:4000/api/auth/"
@@ -20,14 +25,15 @@ class AuthService {
    * @param password
    * @returns
    */
-  async login(username: string, password: string) {
-    return await axios
+  login(username: string, password: string): Promise<any> {
+    return axios
       .post(API_URL + "login", {
         username,
         password
       })
       .then(response => {
         if (response.data.accessToken) {
+          console.log("####### auth-service.ts login() set token #######");
           localStorage.setItem('user', JSON.stringify(response.data))
         }
         return Promise.resolve(response.data)
@@ -40,16 +46,6 @@ class AuthService {
   }
 
   /**
-   * Logout the current user
-   */
-  logout() {
-    localStorage.removeItem('user')
-    localStorage.removeItem('ms_username')
-    useUserStore().status.loggedIn = false
-    useUserStore().user = null
-  }
-
-  /**
    * Register a new user
    *
    * @param username
@@ -57,7 +53,7 @@ class AuthService {
    * @param password
    * @returns
    */
-  register(user: UserModel) {
+  register(user: UserModel): Promise<any> {
     return axios.post(API_URL + "register", {
       username: user.username,
       email: user.email,
@@ -71,15 +67,6 @@ class AuthService {
       console.log(error)
       return Promise.reject(error)
     })
-  }
-
-  /**
-   * Get the current logged in user
-   *
-   * @returns
-   */
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user")!)
   }
 }
 

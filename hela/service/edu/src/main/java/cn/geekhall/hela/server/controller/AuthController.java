@@ -1,5 +1,7 @@
 package cn.geekhall.hela.server.controller;
 
+import cn.geekhall.hela.server.entity.ERole;
+import cn.geekhall.hela.server.mapper.RoleMapper;
 import cn.geekhall.hela.server.mapper.UserMapper;
 import cn.geekhall.hela.server.payload.request.LoginRequest;
 import cn.geekhall.hela.server.payload.request.RegisterRequest;
@@ -9,12 +11,14 @@ import cn.geekhall.hela.server.security.services.UserDetailsImpl;
 import cn.geekhall.hela.utils.Result;
 import freemarker.log.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.geekhall.hela.server.service.impl.UserServiceImpl;
 import cn.geekhall.hela.server.entity.User;
+import cn.geekhall.hela.server.entity.Role;
 import cn.geekhall.hela.server.security.jwt.JwtUtils;
 
 //import cn.geekhall.auth.models.ERole;
@@ -41,10 +45,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,6 +67,9 @@ public class AuthController {
     UserMapper userMapper;
 
     @Autowired
+    RoleMapper roleMapper;
+
+    @Autowired
     UserServiceImpl userService;
 
     @Autowired
@@ -74,23 +78,6 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-//
-//    @PostMapping("/login")
-//    public Result authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-//        System.out.println("login");
-////        User user = userMapper.selectByUsername(loginRequest.getUsername());
-//
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//
-//        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-//
-//        return Result.ok().data("cookie", jwtCookie.toString()).data("user", new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
-//    }
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         System.out.println("login");
@@ -99,13 +86,14 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+//        String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
+                .body(new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), userDetails.getAuthorities()));
 
     }
 
@@ -135,40 +123,28 @@ public class AuthController {
         String salt = String.valueOf(random.nextInt(1000000));
         user.setSalt(salt);
 
-//        Set<String> strRoles = registerRequest.getRole();
-//        Set<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
 
-//        if (strRoles == null) {
-//            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//            roles.add(userRole);
-//        } else {
-//            strRoles.forEach(role -> {
-//                switch (role) {
-//                    case "admin":
-//                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(adminRole);
-//
-//                        break;
-//                    case "mod":
-//                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(modRole);
-//
-//                        break;
-//                    default:
-//                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(userRole);
-//                }
-//            });
-//        }
-//
-//        user.setRoles(roles);
-        //        userRepository.save(user);
+        roles.add(roleMapper.findByRoleId(ERole.ROLE_USER));
+        user.setRoles(roles);
+
+        roles.forEach(role -> {
+            switch (role.getName()) {
+                case ROLE_ADMIN:
+                    roleMapper.addRole(user.getId(), ERole.ROLE_ADMIN);
+                    break;
+                case ROLE_MODERATOR:
+                    roleMapper.addRole(user.getId(), ERole.ROLE_MODERATOR);
+                    break;
+                case ROLE_USER:
+                    roleMapper.addRole(user.getId(), ERole.ROLE_USER);
+                    break;
+                default:
+                    break;
+            }
+        });
+
         userMapper.insert(user);
-
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

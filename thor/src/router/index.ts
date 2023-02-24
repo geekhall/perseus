@@ -191,21 +191,22 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('user')
   document.title = `${to.meta.title} | Thor-System`
-  const role = localStorage.getItem('ms_username')
-  const permission = usePermissionStore();
-  if (!role && to.path !== '/login' && to.path !== '/register') {
+  // const role = localStorage.getItem('ms_username')
+  // const permission = usePermissionStore();
+  if (authRequired && !loggedIn) {
     // no login, redirect to login page.
-    if (to.path === '/register') {
-      next()
-    } else {
-      // next('/login')
-      next()
-    }
-  } else if (to.meta.permission && !permission.key.includes(to.meta.permission)) {
+    console.log('no login, redirect to login page.')
+    next('/login')
+    // } else if (to.meta.permission && !permission.key.includes(to.meta.permission)) {
     // no permission, redirect to 403 page.
-    next('/403')
+    // console.log('no permission, redirect to 403 page.')
+    // next('/403')
   } else {
+    console.log('next to page.')
     next()
   }
 })

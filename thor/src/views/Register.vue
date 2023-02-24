@@ -112,8 +112,11 @@ import { usePermissionStore } from '../store/permission'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { Lock, User } from '@element-plus/icons-vue'
+import { Loading, Lock, User } from '@element-plus/icons-vue'
 import axios from 'axios'
+import authService from '~/services/auth-service'
+import UserModel from '~/models/user'
+import { useUserStore } from '~/store/auth'
 
 interface RegisterInfo {
   // name: string
@@ -210,34 +213,31 @@ const rules: FormRules = {
     }
   ]
 }
+const loading = ref(false)
+const message = ref('')
+const userStore = useUserStore()
 
-// const asyncRegister = async () => {
-//   const result = await axios({
-//     method: 'POST',
-//     url: '/api/auth/register',
-//     data: {
-//       username: param.username,
-//       email: param.email,
-//       password: param.password,
-//       phone: param.phone,
-//       chapta: param.chapta,
-//       smsChapta: param.smsChapta,
-//       idCard: param.idCard
-//     }
-//   })
-//     .then((res: any) => {
-//       console.log(res.data)
-//       console.log('Test2:@@@' + JSON.stringify(res.data))
-//       // envs.value = JSON.parse(JSON.stringify(res.data))
-//       isRegisted.value = JSON.parse(JSON.stringify(res.data))
-//       // console.log('Test2:@@@: envs=' + JSON.stringify(envs))
-//       return true
-//     })
-//     .catch((err: any) => {
-//       console.log(err.message)
-//       return false
-//     })
-// }
+const handleRegister = async () => {
+  loading.value = true
+  let userModel: UserModel = {
+    username: param.username,
+    email: param.email,
+    password: param.password
+  }
+  return await authService
+    .register(userModel)
+    .then((data) => {
+      userStore.user = data
+      router.push('/dashboard')
+      loading.value = false
+      return Promise.resolve(userStore.user)
+    })
+    .catch((error) => {
+      message.value = error
+      loading.value = false
+      return Promise.reject(error)
+    })
+}
 
 const permission = usePermissionStore()
 const register = ref<FormInstance>()
@@ -246,18 +246,20 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid: boolean) => {
     if (valid) {
-      // asyncRegister()
-      if (!isRegisted.value) {
-        ElMessage.error('注册失败')
-        return false
-      } else {
-        ElMessage.success('注册成功')
-        localStorage.setItem('ms_username', param.username)
-        const keys = permission.defaultList[param.username == 'admin' ? 'admin' : 'user']
-        permission.handleSet(keys)
-        localStorage.setItem('ms_keys', JSON.stringify(keys))
-        router.push('/')
-      }
+      console.log('register valid ok')
+      handleRegister()
+        .then((data) => {
+          ElMessage.success('注册成功')
+          console.log('register success ')
+          loading.value = false
+          // router.push('/login')
+        })
+        .catch((error) => {
+          console.log('register error 001')
+          console.log('error: ' + error)
+          loading.value = false
+          ElMessage.error('注册失败')
+        })
     } else {
       ElMessage.error('注册失败')
       return false

@@ -1,8 +1,13 @@
 package cn.geekhall.hela.server.payload.response;
 
+import cn.geekhall.hela.server.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * UserInfoResponse
@@ -18,4 +23,5 @@ public class UserInfoResponse {
     private String username;
     private String email;
 
+    private Collection<? extends GrantedAuthority> authorities;
 }

@@ -18,6 +18,7 @@
             placeholder="password"
             v-model="param.password"
             @keyup.enter="submitForm(login)"
+            show-password
           >
             <template #prepend>
               <el-button tabindex="-1">
@@ -52,35 +53,33 @@ import authService from '~/services/auth-service'
 const userStore = useUserStore()
 const loading = ref(false)
 const message = ref('')
-const loggedIn = computed(() => {
-  console.log('login computed 001: ' + JSON.stringify(userStore))
-  console.log('login computed 001: ' + userStore.status)
-  return userStore.status.loggedIn || false
-})
 
 onMounted(() => {
-  if (loggedIn.value) {
+  if (userStore.status.loggedIn) {
+    console.log('login success onMounted')
     router.push('/dashboard')
   }
 })
 
-const handleLogin = async () => {
+const handleLogin = () => {
   loading.value = true
-  return await authService
+  return authService
     .login(param.username, param.password)
     .then(
       (data) => {
+        ElMessage.success('登录成功')
+        console.log('login success')
+        // permission.generateRoutes()
         userStore.status.loggedIn = true
         userStore.user = data
-        router.push('/dashboard')
         loading.value = false
-        return Promise.resolve(userStore.user)
+        router.push('/dashboard')
       },
       (error) => {
-        message.value = error
+        console.log('login error 001')
         loading.value = false
         userStore.status.loggedIn = false
-        return Promise.reject(error)
+        ElMessage.error('登录失败，验证未通过:' + error.message)
       }
     )
     .catch((error) => {
@@ -114,21 +113,11 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid: boolean) => {
     if (valid) {
       console.log('valid ok')
-      handleLogin()
-        .then(() => {
-          ElMessage.success('登录成功')
-          console.log('login success')
-          loading.value = false
-          userStore.status.loggedIn = true
-        })
-        .catch(() => {
-          console.log('login error 001')
-          loading.value = false
-          userStore.status.loggedIn = false
-          ElMessage.error('登录失败，验证未通过')
-        })
+      handleLogin().catch(() => {
+        console.log('login error 002')
+      })
     } else {
-      console.log('login error 002')
+      console.log('login error 003')
       ElMessage.error('登录失败，验证未通过')
       loading.value = false
       userStore.status.loggedIn = false

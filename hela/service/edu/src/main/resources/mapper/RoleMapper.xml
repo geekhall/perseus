@@ -6,18 +6,28 @@
     <resultMap id="BaseResultMap" type="cn.geekhall.hela.server.entity.Role">
         <id column="id" property="id" />
         <result column="name" property="name" />
-        <result column="description" property="description" />
-        <result column="code" property="code" />
-        <result column="sort" property="sort" />
-        <result column="version" property="version" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="deleted" property="deleted" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, description, code, sort, version, create_time, update_time, deleted
+        id, name
     </sql>
+
+    <resultMap id="UserResultMap" type="cn.geekhall.hela.server.entity.User">
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <select id="getRoles" resultMap="BaseResultMap">
+        select r.* from role r
+                            left join user_roles as ur on r.id=ur.role_id
+        where 1=1
+          and ur.user_id = #{userId}
+    </select>
+
+    <insert id="addRole">
+        insert into user_roles values (#{userId}, #{roleId})
+    </insert>
+
 
 </mapper>

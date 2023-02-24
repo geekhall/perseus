@@ -18,7 +18,7 @@
         <result column="age" property="age" />
         <result column="email" property="email" />
         <result column="department_id" property="departmentId" />
-        <result column="role_id" property="roleId" />
+<!--        <result column="role_id" property="roleId" />-->
         <result column="status" property="status" />
         <result column="version" property="version" />
         <result column="create_time" property="createTime" />
@@ -28,7 +28,15 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, username, password, salt, sex, token, token_expire_time, id_card, phone, avatar, age, email, department_id, role_id, status, version, create_time, update_time, deleted
+        id, name, username, password, salt, sex, token, token_expire_time, id_card, phone, avatar, age, email, department_id, status, version, create_time, update_time, deleted
     </sql>
+
+    <select id="getById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where id = #{id}
+
+    </select>
 
 </mapper>

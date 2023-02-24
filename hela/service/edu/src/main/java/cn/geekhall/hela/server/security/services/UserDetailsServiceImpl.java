@@ -22,8 +22,6 @@ import cn.geekhall.hela.server.entity.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-//    @Autowired
-//    UserRepository userRepository;
 
     @Autowired
     UserMapper userMapper;
@@ -32,18 +30,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("username", username);
-//        User user = userMapper.selectOne(queryWrapper);
         User user = userMapper.selectByUsername(username);
 
         if (user == null) {
             System.out.println("用户不存在！ User not exists!");
             throw new UsernameNotFoundException("User not exists!");
         }
-
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
         return UserDetailsImpl.build(user);
     }

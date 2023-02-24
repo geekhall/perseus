@@ -21,6 +21,7 @@
         </div>
         <!-- 用户头像 -->
         <el-avatar class="user-avatar" :size="30" :src="imgurl" />
+
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -80,15 +81,16 @@ import { useRouter } from 'vue-router'
 import imgurl from '~/assets/img/avatar.png'
 import { SwitchButton } from '@element-plus/icons-vue'
 import authService from '~/services/auth-service'
+import { useUserStore } from '~/store/auth'
 
-const username: string | null = localStorage.getItem('ms_username')
+const userStore = useUserStore()
+const username: string | null = userStore.getUsername
 const message: number = 2
 
 const sidebar = useSidebarStore()
 
 // 侧边栏菜单折叠展开
 const collapseMenu = () => {
-  // console.log('collapseMenu')
   sidebar.handleCollapse()
 }
 
@@ -103,7 +105,7 @@ const router = useRouter()
 const handleCommand = (command: string) => {
   console.log('handleCommand', command)
   if (command == 'loginout') {
-    localStorage.removeItem('ms_username')
+    // localStorage.removeItem('ms_username')
     authService.logout()
 
     router.push('/login')
