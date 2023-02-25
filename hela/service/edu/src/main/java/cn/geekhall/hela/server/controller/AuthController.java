@@ -20,19 +20,6 @@ import cn.geekhall.hela.server.service.impl.UserServiceImpl;
 import cn.geekhall.hela.server.entity.User;
 import cn.geekhall.hela.server.entity.Role;
 import cn.geekhall.hela.server.security.jwt.JwtUtils;
-
-//import cn.geekhall.auth.models.ERole;
-//import cn.geekhall.auth.models.Role;
-//import cn.geekhall.auth.models.User;
-//import cn.geekhall.auth.payload.request.LoginRequest;
-//import cn.geekhall.auth.payload.request.RegisterRequest;
-//import cn.geekhall.auth.payload.response.MessageResponse;
-//import cn.geekhall.auth.payload.response.UserInfoResponse;
-//import cn.geekhall.auth.repository.RoleRepository;
-//import cn.geekhall.auth.repository.UserRepository;
-//import cn.geekhall.auth.security.jwt.JwtUtils;
-//import cn.geekhall.auth.security.services.UserDetailsImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -100,19 +87,21 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        if (userMapper.selectByUsername(registerRequest.getUsername()) != null) {
+        if (userMapper.existsByUsername(registerRequest.getUsername())) {
             System.out.println("username is already taken");
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userMapper.selectByEmail(registerRequest.getEmail()) != null) {
+        if (userMapper.existsByEmail(registerRequest.getEmail())) {
             System.out.println("email is already in use");
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
+
+
 
         // Create new user's account
         User user = new User(registerRequest.getUsername(),
@@ -122,29 +111,36 @@ public class AuthController {
         Random random = new Random();
         String salt = String.valueOf(random.nextInt(1000000));
         user.setSalt(salt);
-
-        List<Role> roles = new ArrayList<>();
-
-        roles.add(roleMapper.findByRoleId(ERole.ROLE_USER));
-        user.setRoles(roles);
-
-        roles.forEach(role -> {
-            switch (role.getName()) {
-                case ROLE_ADMIN:
-                    roleMapper.addRole(user.getId(), ERole.ROLE_ADMIN);
-                    break;
-                case ROLE_MODERATOR:
-                    roleMapper.addRole(user.getId(), ERole.ROLE_MODERATOR);
-                    break;
-                case ROLE_USER:
-                    roleMapper.addRole(user.getId(), ERole.ROLE_USER);
-                    break;
-                default:
-                    break;
-            }
-        });
-
+        user.setRoleId(ERole.ROLE_USER.getValue());
         userMapper.insert(user);
+
+//        Long user_id = userMapper.getIdByUsername(registerRequest.getUsername());
+//        System.out.println("user_id: " + user_id);
+//
+//        List<Role> roles = new ArrayList<>();
+//        Role roleUser = new Role();
+//        roleUser.setName(ERole.ROLE_USER);
+//        System.out.println("roleUser: " + roleUser);
+//        roles.add(roleUser);
+//        user.setRoles(roles);
+//        System.out.println("roles: " + roles);
+//        roles.forEach(role -> {
+//            switch (role.getName()) {
+//                case ROLE_ADMIN:
+//                    roleMapper.addRole(user_id, ERole.ROLE_ADMIN.getValue());
+//                    break;
+//                case ROLE_MODERATOR:
+//                    roleMapper.addRole(user_id, ERole.ROLE_MODERATOR.getValue());
+//                    break;
+//                case ROLE_USER:
+//                    roleMapper.addRole(user_id, ERole.ROLE_USER.getValue());
+//                    break;
+//                default:
+//                    break;
+//            }
+//        });
+
+
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

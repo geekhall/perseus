@@ -83,9 +83,10 @@ public class User extends Model<User> {
     @ApiModelProperty("部门ID")
     private Long departmentId;
 
-    @ApiModelProperty(value = "角色", dataType = "List")
-//    private Long roleId;
-    private List<Role> roles;
+//    @ApiModelProperty(value = "角色", dataType = "List")
+    @ApiModelProperty("角色ID")
+    private Long roleId;
+//    private List<Role> roles;
 
     @ApiModelProperty("状态 1-正常 2-禁用")
     private Boolean status;

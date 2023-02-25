@@ -34,7 +34,7 @@
     <select id="getById" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
-        from user
+        from h_user
         where id = #{id}
 
     </select>

@@ -18,15 +18,14 @@
     </resultMap>
 
     <!-- 通用查询结果列 -->
-    <select id="getRoles" resultMap="BaseResultMap">
-        select r.* from role r
-                            left join user_roles as ur on r.id=ur.role_id
+    <select id="getRolesByUserId" resultMap="BaseResultMap">
+        select r.* from h_role r left join user_roles as ur on r.id=ur.role_id
         where 1=1
           and ur.user_id = #{userId}
     </select>
 
     <insert id="addRole">
-        insert into user_roles values (#{userId}, #{roleId})
+        insert into h_user_role values (#{userId}, #{roleId})
     </insert>
 
 

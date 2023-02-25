@@ -20,7 +20,17 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from h_user where username = #{username}")
     User selectByUsername(String username);
 
+    @Select("select EXISTS (SELECT 1 FROM h_user where username = #{role_name})")
+    boolean existsByUsername(String username);
+
 
     @Select("select * from h_user where email = #{email}")
     User selectByEmail(String email);
+
+    @Select("select EXISTS (SELECT 1 FROM h_user where email = #{email})")
+    boolean existsByEmail(String email);
+
+    @Select("select * from h_user where username = #{username}")
+    Long getIdByUsername(String username);
+
 }
