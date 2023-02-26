@@ -34,8 +34,9 @@ class AuthService {
       .then(response => {
         if (response.data.accessToken) {
           console.log("####### auth-service.ts login() set token #######");
-          localStorage.setItem('user', JSON.stringify(response.data))
+          // localStorage.setItem('user', JSON.stringify(response.data))
         }
+        localStorage.setItem('user', JSON.stringify(response.data))
         return Promise.resolve(response.data)
       }).catch(error => {
         console.log("####### auth-service.ts login() error #######");

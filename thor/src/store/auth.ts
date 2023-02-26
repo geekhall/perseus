@@ -63,7 +63,6 @@ export const useUserStore = defineStore('user', {
     },
     logout() {
       localStorage.removeItem('user')
-      localStorage.removeItem('ms_username')
       this.status.loggedIn = false
       this.user = null
     },

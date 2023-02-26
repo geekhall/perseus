@@ -82,6 +82,7 @@ import imgurl from '~/assets/img/avatar.png'
 import { SwitchButton } from '@element-plus/icons-vue'
 import authService from '~/services/auth-service'
 import { useUserStore } from '~/store/auth'
+import useStore from 'element-plus/es/components/table/src/store'
 
 const userStore = useUserStore()
 const username: string | null = userStore.getUsername
@@ -105,9 +106,7 @@ const router = useRouter()
 const handleCommand = (command: string) => {
   console.log('handleCommand', command)
   if (command == 'loginout') {
-    // localStorage.removeItem('ms_username')
-    authService.logout()
-
+    userStore.logout()
     router.push('/login')
   } else if (command == 'profile') {
     router.push('/profile')
