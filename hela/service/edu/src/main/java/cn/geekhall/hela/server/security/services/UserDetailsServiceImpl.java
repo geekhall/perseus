@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         if (user == null) {
             System.out.println("用户不存在！ User not exists!");
-            throw new UsernameNotFoundException("User not exists!");
+//            throw new UsernameNotFoundException("User not exists!");
         }
 
         return UserDetailsImpl.build(user);

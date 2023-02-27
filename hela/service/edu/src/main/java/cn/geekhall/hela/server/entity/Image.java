@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import java.io.Serializable;
 
@@ -18,6 +20,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @TableName("h_image")
+@Builder
 @ApiModel(value = "Image对象", description = "图像")
 public class Image extends Model<Image> {
 
@@ -39,9 +42,30 @@ public class Image extends Model<Image> {
     private byte[] data;
 
 
+//    public Image name(String name){
+//        this.name = name;
+//        return this;
+//    }
+//    public Image type(String type) {
+//        this.type = type;
+//        return this;
+//    }
+//
+//    public Image path(String path) {
+//        this.path = path;
+//        return this;
+//    }
+//
+//    public Image data(byte[] data) {
+//        this.data = data;
+//        return this;
+//    }
     @Override
     public Serializable pkVal() {
         return this.id;
     }
 
+//    public byte[] getImage() {
+//        return this.data;
+//    }
 }

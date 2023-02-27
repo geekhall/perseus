@@ -7,4 +7,7 @@ package cn.geekhall.hela.server.payload.response;
  * @date 2023/2/26 11:16
  */
 public class ImageUploadResponse {
+    public ImageUploadResponse(String message) {
+
+    }
 }

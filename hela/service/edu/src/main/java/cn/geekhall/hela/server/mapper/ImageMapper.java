@@ -4,6 +4,8 @@ import cn.geekhall.hela.server.entity.Image;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Optional;
+
 /**
  * <p>
  *  Mapper 接口
@@ -15,4 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ImageMapper extends BaseMapper<Image> {
 
+    Optional<Image> findByName(String name);
 }
