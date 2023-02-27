@@ -45,6 +45,9 @@ export const useUserStore = defineStore('user', {
     },
     getEmail(): string {
       return this.user.email
+    },
+    getDesc(): string {
+      return this.user.desc
     }
   },
   actions: {

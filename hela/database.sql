@@ -410,3 +410,18 @@ create table h_machine
     deleted tinyint(1) unsigned not null default 0 comment '逻辑删除',
     PRIMARY key (id)
 ) ENGINE = InnoDB CHARACTER SET = utf8 comment='服务器';
+
+
+DROP TABLE IF EXISTS h_image;
+CREATE TABLE h_image
+(
+    id BIGINT(20) NOT NULL COMMENT '主键ID',
+    name VARCHAR(30) NOT NULL  COMMENT '名称',
+    type VARCHAR(50) NULL DEFAULT NULL COMMENT '类型',
+    path VARCHAR(256) NULL DEFAULT NULL COMMENT '路径',
+    data LONGBLOB NULL DEFAULT NULL COMMENT '数据',
+    PRIMARY KEY (id) using BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8;
+
+DELETE FROM h_image;
+

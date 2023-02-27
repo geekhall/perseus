@@ -15,8 +15,8 @@
                 <i class="el-icon-lx-camerafill"></i>
               </span>
             </div>
-            <div class="info-name">{{ name }}</div>
-            <div class="info-desc">系统管理员</div>
+            <div class="info-name">{{ username }}</div>
+            <div class="info-desc">{{ desc }}</div>
           </div>
         </el-card>
       </el-col>
@@ -28,7 +28,7 @@
             </div>
           </template>
           <el-form label-width="90px">
-            <el-form-item label="用户名："> {{ name }} </el-form-item>
+            <el-form-item label="用户名："> {{ username }} </el-form-item>
             <el-form-item label="旧密码：">
               <el-input type="password" v-model="form.old"></el-input>
             </el-form-item>
@@ -79,12 +79,17 @@ import { reactive, ref } from 'vue'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 import avatar from '../assets/img/avatar.png'
+import { useUserStore } from '~/store/auth'
 
-const name = localStorage.getItem('ms_username')
+const userStore = useUserStore()
+
+// const name = localStorage.getItem('ms_username')
+const username = userStore.getUsername
+const desc = userStore.getDesc
 const form = reactive({
   old: '',
   new: '',
-  desc: '系统管理员'
+  desc: desc
 })
 const onSubmit = () => {}
 

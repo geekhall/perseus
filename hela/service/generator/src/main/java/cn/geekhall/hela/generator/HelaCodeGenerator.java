@@ -51,15 +51,16 @@ import java.util.List;
 public class HelaCodeGenerator {
     public static void main(String[] args) {
         List<String> includes = new ArrayList<String>();
-        includes.add("h_teacher");
-        includes.add("h_user");
-        includes.add("h_role");
-        includes.add("h_permission");
-        includes.add("h_department");
-        includes.add("h_environment");
-        includes.add("h_player");
-        includes.add("h_product");
-        includes.add("h_weapon");
+        includes.add("h_image");
+//        includes.add("h_teacher");
+//        includes.add("h_user");
+//        includes.add("h_role");
+//        includes.add("h_permission");
+//        includes.add("h_department");
+//        includes.add("h_environment");
+//        includes.add("h_player");
+//        includes.add("h_product");
+//        includes.add("h_weapon");
         StrategyConfig strategyConfig = new StrategyConfig.Builder()
                 .entityBuilder()
                 .disableSerialVersionUID()
