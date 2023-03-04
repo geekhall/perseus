@@ -4,6 +4,11 @@
 -- 3. 表名不使用复数名词
 -- 4. 表的命名最好是加上”业务名称_表的作用“，如edu_teacher
 -- 5. 表必备三字段: id, create_time, update_time
+create database if not exists olympians default charset utf8mb4 collate utf8mb4_general_ci;
+create user 'zeus'@'%' identified by 'yy123456';
+grant all privileges on olympians.* to 'zeus'@'%';
+flush privileges;
+
 
 
 -- h_user
@@ -92,31 +97,28 @@ values
 (21, '投资部', '投资部', '0021', null, 1, 21, 1, now());
 
 -- h_role 角色表
-drop table if exists `h_role`;
-create table h_role
-(
-    id BIGINT(20) not null comment '角色ID',
-    name VARCHAR(30) null default null comment '角色名称',
-    description VARCHAR(255) null default null comment '角色描述',
-    code VARCHAR(30) null default null comment '角色编码',
-    sort int(10) unsigned not null default 0 comment '显示排序',
-    version int(11) null default 1 comment '版本号',
-    create_time datetime comment '创建时间',
-    update_time datetime comment '修改时间',
-    deleted tinyint(1) unsigned not null default 0 comment '逻辑删除',
-    PRIMARY key (id)
-) comment='角色';
+DROP TABLE IF EXISTS `h_role`;
+CREATE TABLE `h_role` (
+      `id` bigint(20) NOT NULL COMMENT '角色ID',
+      `name` varchar(30) DEFAULT NULL COMMENT '角色名称',
+      `description` varchar(255) DEFAULT NULL COMMENT '角色描述',
+      `code` varchar(30) DEFAULT NULL COMMENT '角色编码',
+      `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '显示排序',
+      `version` int(11) DEFAULT '1' COMMENT '版本号',
+      `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+      `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+      `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '逻辑删除',
+      PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
+
 
 truncate table h_role;
-insert into h_role (id, name, description, code, sort, version, create_time)
-values
-(1, 'admin', '超级管理员', '0001', 1, 1, now()),
-(2, 'manager', '管理员', '0002', 2, 1, now()),
-(3, 'user', '普通用户', '0003', 3, 1, now()),
-(4, 'test', '测试用户', '0004', 4, 1, now()),
-(5, 'dev', '开发用户', '0005', 5, 1, now()),
-(6, 'member', '会员', '0006', 6, 1, now());
-
+INSERT INTO `olympians`.`h_role` (`id`, `name`, `description`, `code`, `sort`, `version`, `create_time`, `update_time`, `deleted`) VALUES (1, 'ROLE_ADMIN', '超级管理员', '0001', 1, 1, '2023-02-06 12:55:45', NULL, 0);
+INSERT INTO `olympians`.`h_role` (`id`, `name`, `description`, `code`, `sort`, `version`, `create_time`, `update_time`, `deleted`) VALUES (2, 'ROLE_MANAGER', '管理员', '0002', 2, 1, '2023-02-06 12:55:45', NULL, 0);
+INSERT INTO `olympians`.`h_role` (`id`, `name`, `description`, `code`, `sort`, `version`, `create_time`, `update_time`, `deleted`) VALUES (3, 'ROLE_MODERATOR', '会员', '0003', 3, 1, '2023-02-06 12:55:45', NULL, 0);
+INSERT INTO `olympians`.`h_role` (`id`, `name`, `description`, `code`, `sort`, `version`, `create_time`, `update_time`, `deleted`) VALUES (4, 'ROLE_USER', '普通用户', '0004', 4, 1, '2023-02-06 12:55:45', NULL, 0);
+INSERT INTO `olympians`.`h_role` (`id`, `name`, `description`, `code`, `sort`, `version`, `create_time`, `update_time`, `deleted`) VALUES (5, 'ROLE_DEV', '开发用户', '0005', 5, 1, '2023-02-06 12:55:45', NULL, 0);
+INSERT INTO `olympians`.`h_role` (`id`, `name`, `description`, `code`, `sort`, `version`, `create_time`, `update_time`, `deleted`) VALUES (6, 'ROLE_TEST', '测试用户', '0006', 6, 1, '2023-02-06 12:55:45', NULL, 0);
 
 -- h_user_role 用户角色关系表
 drop table if exists `h_user_role`;
