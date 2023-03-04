@@ -35,37 +35,12 @@ public class Image extends Model<Image> {
     @ApiModelProperty("类型")
     private String type;
 
-    @ApiModelProperty("路径")
-    private String path;
-
     @ApiModelProperty("数据")
-    private byte[] data;
+    private byte[] image;
 
-
-//    public Image name(String name){
-//        this.name = name;
-//        return this;
-//    }
-//    public Image type(String type) {
-//        this.type = type;
-//        return this;
-//    }
-//
-//    public Image path(String path) {
-//        this.path = path;
-//        return this;
-//    }
-//
-//    public Image data(byte[] data) {
-//        this.data = data;
-//        return this;
-//    }
     @Override
     public Serializable pkVal() {
         return this.id;
     }
 
-//    public byte[] getImage() {
-//        return this.data;
-//    }
 }

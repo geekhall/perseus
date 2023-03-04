@@ -2,6 +2,7 @@ package cn.geekhall.hela.server.controller;
 
 import cn.geekhall.hela.server.mapper.ImageMapper;
 import cn.geekhall.hela.server.payload.response.ImageUploadResponse;
+import cn.geekhall.hela.server.util.FileUtility;
 import cn.geekhall.hela.server.util.ImageUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,13 +35,29 @@ public class ImageController {
      * @param file
      * @return
      */
-    @PostMapping("/upload/image")
-    public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
-        imageMapper.insert(
-                Image.builder().name(file.getOriginalFilename())
-                        .type(file.getContentType())
-                        .data(ImageUtility.decompressImage(file.getBytes())).build());
-        return ResponseEntity.status(HttpStatus.OK).body(new ImageUploadResponse("Image uploaded successfully: " + file.getOriginalFilename()));
+    @PostMapping(value = "/test/upload/image", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam("image") MultipartFile file){
+        ImageUploadResponse response = null;
+        ResponseEntity<ImageUploadResponse> responseEntity = null;
+        try {
+            imageMapper.insert(
+                    Image.builder().name(file.getOriginalFilename())
+                            .type(file.getContentType())
+                            .image(ImageUtility.decompressImage(file.getBytes())).build());
+            response = new ImageUploadResponse("Image uploaded successfully: " + file.getOriginalFilename());
+            response.setType(file.getContentType());
+            response.setName(file.getOriginalFilename());
+            response.setUrl(ImageUtility.uploadImage(file));
+
+            responseEntity = ResponseEntity.status(HttpStatus.OK).body(response);
+            System.out.println("Image uploaded successfully: " + file.getOriginalFilename());
+            System.out.println("response: " + response);
+            System.out.println("responseEntity: " + responseEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return responseEntity;
     }
 
     @GetMapping(path = {"/get/image/info/{name}"})
@@ -48,7 +65,7 @@ public class ImageController {
         final Optional<Image> dbImage = imageMapper.findByName(name);
 
         return Image.builder().name(dbImage.get().getName())
-                .type(dbImage.get().getType()).data(ImageUtility.decompressImage(dbImage.get().getData())).build();
+                .type(dbImage.get().getType()).image(ImageUtility.decompressImage(dbImage.get().getImage())).build();
     }
 
     @GetMapping(path = {"/get/image/{name}"})
@@ -56,6 +73,6 @@ public class ImageController {
         final Optional<Image> dbImage = imageMapper.findByName(name);
 
         return ResponseEntity.ok().contentType(MediaType.valueOf(dbImage.get().getType()))
-                .body(ImageUtility.decompressImage(dbImage.get().getData()));
+                .body(ImageUtility.decompressImage(dbImage.get().getImage()));
     }
 }
