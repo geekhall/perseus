@@ -84,7 +84,6 @@ public class AuthController {
 
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         if (userMapper.existsByUsername(registerRequest.getUsername())) {

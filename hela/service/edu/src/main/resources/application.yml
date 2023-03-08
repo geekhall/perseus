@@ -89,3 +89,4 @@ hela:
     jwtCookieName: hela
     jwtSecret: helaSecretKey
     jwtExpirationMs: 86400000
+    baseDirectory: /Users/yiny/workspace/vite/perseus/hela/

@@ -14,7 +14,6 @@
     <modules>
         <module>generator</module>
         <module>edu</module>
-        <module>auth</module>
     </modules>
 
     <properties>

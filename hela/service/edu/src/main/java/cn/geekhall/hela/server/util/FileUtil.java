@@ -1,6 +1,7 @@
 package cn.geekhall.hela.server.util;
 
 import cn.geekhall.hela.server.controller.FileUploadController;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -12,12 +13,13 @@ import java.util.List;
 import java.util.zip.ZipOutputStream;
 
 /**
- * FileUtility
+ * FileUtil
  *
  * @author yiny
  * @date 2023/2/28 12:49
  */
-public class FileUtility {
+@Slf4j
+public class FileUtil {
     private static  final File uploadDirectory = new File(getRealPath());
 
     public static boolean saveFile(byte[] data, String filePath) throws Exception{
@@ -134,5 +136,30 @@ public class FileUtility {
             in.close();
         }
         zipOutputStream.close();
+    }
+
+    /**
+     * Create directory if not exists.
+     * @param writePath
+     * @return
+     */
+    public static boolean createDirIfNotExists(String writePath) {
+        if (writePath == null || writePath.isEmpty()) {
+            return false;
+        }
+        boolean result = false;
+        File directory = new File(writePath);
+        if (!directory.exists()) {
+            log.info("Directory {} not exists, create it.", writePath);
+            result =  directory.mkdirs();
+            if (result) {
+                log.info("Directory {} created.", writePath);
+            } else {
+                log.error("Directory {} created failed.", writePath);
+            }
+        } else {
+            log.info("Directory {} exists.", writePath);
+        }
+        return result;
     }
 }

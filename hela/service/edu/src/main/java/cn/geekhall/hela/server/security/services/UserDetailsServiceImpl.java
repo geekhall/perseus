@@ -19,7 +19,6 @@ import cn.geekhall.hela.server.entity.User;
  * @author yiny
  * @date 2023/2/7 13:12
  */
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

@@ -13,7 +13,7 @@ import java.util.*;
  * @author yiny
  * @date 2023/2/27 21:52
  */
-public class ImageUtility {
+public class ImageUtil {
 
     public static final String UPLOADS_PATH= "uploads/";
     public static final String PROJECT_ROOT_PATH = System.getProperty("user.dir");

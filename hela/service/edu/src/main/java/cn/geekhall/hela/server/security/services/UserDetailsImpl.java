@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import cn.geekhall.hela.server.entity.ERole;
 import cn.geekhall.hela.server.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -51,8 +52,9 @@ public class UserDetailsImpl implements UserDetails {
 //                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
 //                .collect(Collectors.toList());
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(ERole.ROLE_USER.name()));
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
+//        authorities.add(new SimpleGrantedAuthority(ERole.ROLE_USER.name()));
 
         return new UserDetailsImpl(
                 user.getId(),
