@@ -27,6 +27,9 @@
             </template>
           </el-input>
         </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="param.rememberMe">记住密码</el-checkbox>
+        </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm(login)">登录</el-button>
         </div>
@@ -64,7 +67,7 @@ onMounted(() => {
 const handleLogin = () => {
   loading.value = true
   return authService
-    .login(param.username, param.password)
+    .login(param.username, param.password, param.rememberMe || false)
     .then(
       (data) => {
         ElMessage.success('登录成功')
@@ -93,7 +96,8 @@ const handleLogin = () => {
 const router = useRouter()
 const param = reactive<UserModel>({
   username: 'test001',
-  password: '123456'
+  password: '123456',
+  rememberMe: true
 })
 const rules: FormRules = {
   username: [

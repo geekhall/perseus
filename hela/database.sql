@@ -427,3 +427,13 @@ CREATE TABLE h_image
 
 DELETE FROM h_image;
 
+
+
+create table persistent_logins
+(
+    username varchar(64) not null,
+    series varchar(64) primary key,
+    token varchar(64) not null,
+    last_used timestamp not null default current_timestamp on update current_timestamp,
+    primary key (series)
+) ENGINE = InnoDB CHARACTER SET = utf8;

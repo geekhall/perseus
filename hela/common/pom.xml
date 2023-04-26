@@ -13,6 +13,7 @@
     <modules>
         <module>base</module>
         <module>utils</module>
+        <module>gateway</module>
     </modules>
     <artifactId>common</artifactId>
 

@@ -5,6 +5,7 @@ export default class UserModel {
     public email?: string,
     public password: string = '',
     public roles?: string[],
+    public rememberMe?: boolean,
     public accessToken?: string
   ) { }
 }

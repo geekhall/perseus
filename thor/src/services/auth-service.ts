@@ -25,7 +25,7 @@ class AuthService {
    * @param password
    * @returns
    */
-  login(username: string, password: string): Promise<any> {
+  login(username: string, password: string, rememberMe: boolean): Promise<any> {
     return axios
       .post(API_URL + "login", {
         username,

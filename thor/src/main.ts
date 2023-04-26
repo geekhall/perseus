@@ -54,7 +54,7 @@ app.directive('permission', {
   mounted(el, binding) {
     if (!permission.key.includes(String(binding.value))) {
       // el.parentNode.removeChild(el);
-      el['hidden'] = true;
+      // el['hidden'] = true;
     }
   },
 })

@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @CrossOrigin()
-@RequestMapping("/test/upload")
+@RequestMapping("/upload")
 public class FileUploadController {
 
     @Autowired
