@@ -5,7 +5,7 @@
       加微信号geekhour_net探讨问题。
     </div>
     <div class="wechat-img">
-      <img src="../assets/img/wechat.png" />
+      <img src="../assets/img/wechat.jpeg" />
     </div>
   </div>
 </template>
