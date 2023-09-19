@@ -17,6 +17,13 @@ export default async function request(config: AxiosRequestConfig) {
   // 2.1 请求拦截的作用
   instance.interceptors.request.use(
     (config: AxiosRequestConfig) => {
+      // if (serverConfig.useTokenAuthorization) {
+      //   const token = localStorage.getItem('token');
+      //   if (token) {
+      //     config.headers.Authorization = token;
+      //   }
+      //   return config;
+      // }
       const token = localStorage.getItem('token');
       if (token) {
         config.headers.Authorization = token;

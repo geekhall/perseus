@@ -12,15 +12,6 @@
             </template>
           </el-input>
         </el-form-item>
-        <!-- <el-form-item prop="name">
-          <el-input v-model="param.name" placeholder="请输入姓名">
-            <template #prepend>
-              <el-button tabindex="-1"
-                ><el-icon><User /> </el-icon
-              ></el-button>
-            </template>
-          </el-input>
-        </el-form-item> -->
         <el-form-item prop="email">
           <el-input v-model="param.email" placeholder="请输入Email">
             <template #prepend>
@@ -30,7 +21,6 @@
             </template>
           </el-input>
         </el-form-item>
-
         <el-form-item prop="password">
           <el-input type="password" placeholder="请输入密码" v-model="param.password">
             <template #prepend>
@@ -51,7 +41,7 @@
           </el-input>
         </el-form-item>
 
-        <el-form-item>
+        <!-- <el-form-item>
           <div class="chapta-container">
             <el-input v-model="param.chapta" placeholder="请输入验证码" style="margin-right: 1em">
               <el-button tabindex="-1"
@@ -65,9 +55,9 @@
               style="width: 100px; height: 40px"
             ></el-image>
           </div>
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item>
+        <!-- <el-form-item>
           <el-input v-model="param.phone" placeholder="请输入电话号码">
             <template #prepend>
               <el-button tabindex="-1"
@@ -90,7 +80,7 @@
             </el-input>
             <el-button type="primary" class="ms-btn">获取验证码</el-button>
           </div>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item>
           <el-checkbox v-model="param.remember">记住密码</el-checkbox>
