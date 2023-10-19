@@ -33,6 +33,8 @@ const Import = () => import('../views/Import.vue')
 const Export = () => import('../views/Export.vue')
 const Permission = () => import('../views/Permission.vue')
 const Upload = () => import('../views/Upload.vue')
+const Environment = () => import('../views/Environment.vue')
+const Roster = () => import('../views/Roster.vue')
 
 
 // 2. Define some routes
@@ -44,6 +46,16 @@ const routes: RouteRecordRaw[] = [
         path: '/dashboard', name: "dashboard",
         meta: { title: '首页', permission: 'dashboard' },
         component: Dashboard
+      },
+      {
+        path: '/environment', name: "environment",
+        meta: { title: '测试环境', permission: 'environment' },
+        component: Environment
+      },
+      {
+        path: '/roster', name: "roster",
+        meta: { title: '值班表', permission: 'roster' },
+        component: Roster
       },
       {
         path: '/lock', name: "lock",

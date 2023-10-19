@@ -52,7 +52,7 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     login(username: string, password: string): Promise<any> {
-      return authService.login(username, password).then(
+      return authService.login(username, password, false).then(
         (user) => {
           this.user = user
           this.status.loggedIn = true

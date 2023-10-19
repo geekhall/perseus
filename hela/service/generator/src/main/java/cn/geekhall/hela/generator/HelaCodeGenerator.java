@@ -51,7 +51,8 @@ import java.util.List;
 public class HelaCodeGenerator {
     public static void main(String[] args) {
         List<String> includes = new ArrayList<String>();
-        includes.add("h_image");
+        includes.add("h_env");
+//        includes.add("h_image");
 //        includes.add("h_teacher");
 //        includes.add("h_user");
 //        includes.add("h_role");

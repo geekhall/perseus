@@ -61,10 +61,22 @@ import { useRoute } from 'vue-router'
 
 const items = [
   {
-    icon: 'House',
+    icon: 'HomeFilled',
     index: '/',
     title: '系统首页',
     permission: 'dashboard'
+  },
+  {
+    icon: 'Grid',
+    index: '/environment',
+    title: '测试环境',
+    permission: 'environment'
+  },
+  {
+    icon: 'List',
+    index: '/roster',
+    title: '值班表',
+    permission: 'roster'
   },
   {
     icon: 'Calendar',
