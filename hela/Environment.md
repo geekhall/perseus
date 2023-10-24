@@ -18,23 +18,13 @@
 ### 子模块
 gateway：API网关
 service：
-  - acl：用户权限管理API接口服务（用户管理、角色管理、权限管理等）
-  - cms：CMS-API接口
-  - edu：教学相关API接口
-  - sms：短信API接口
-  - blog：博客API接口
-  - order：订单API接口
-  - oss：阿里云OSS-API接口
-  - statistics：统计报表API接口
-  - ucenter：会员API接口
-  - vod：视频点播API接口
+  edu : 后台服务
+  generator: DAO 代码生成器。根据后台表结构生成VO、Controller、Mapper、Service和SeviceImpl等类框架。
 
 ## 后台数据库
 
 ### DB SQL
 参考`database.sql`文件
-
-
 
 ### 添加MySQL连接配置
 
@@ -302,7 +292,7 @@ MybatisPlus3.2.0版本删除，官方推荐使用第三方工具分析
 ```yaml
 spring:
   mvc:
-    pathmatch: 
+    pathmatch:
       # Failed to start bean 'documentationPluginsBootstrapper' in spring data rest
       # springfox3.0.0 has compatibility problem with spring boot 2.6.x
       matching-strategy: ant_path_matcher # to resolve spring fox null pointer problem
@@ -365,7 +355,7 @@ spring:
 logging:
   level:
     root: info
-    
+
 ```
 
 日志级别包括： OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
@@ -395,24 +385,19 @@ logging:
   pattern:
     console: '%d{yyyy-MM-dd} -- [%thread] -- %-5level -- %logger{50} -- %msg%n' # 控制台输出格式
     file: '%d{yyyy-MM-dd} == [%thread] == %-5level == %logger{50} == %msg%n'    # 文件输出格式
-    
+
 ```
 
 ### 通过日志框架原生配置文件进行定制化配置
 
-| 日志框架 | 定制化配置文件 |
-| ---- | ---- |
-| Logback | logback-spring.xml, logback-spring.groovy, logback.xml， logback.groovy |
-| Log4j2 | log4j2-spring.xml, log4j2.xml |
-| JDK(Java Util Logging) | logging.properties |
+| 日志框架               | 定制化配置文件                                                          |
+| ---------------------- | ----------------------------------------------------------------------- |
+| Logback                | logback-spring.xml, logback-spring.groovy, logback.xml， logback.groovy |
+| Log4j2                 | log4j2-spring.xml, log4j2.xml                                           |
+| JDK(Java Util Logging) | logging.properties                                                      |
 
 PS：以 Logback 为例，若使用 logback.xml ，则直接就被日志框架识别了；若使用 logback-spring.xml ，
 则日志框架就不直接加载日志的配置项，由 SpringBoot 解析日志配置，可以使用 SpringBoot 的高级 Profile 功能
-
-
-https://blog.csdn.net/yang1393214887/article/details/108488754
-
-
 
 ## Spring Security + JWT 实现登录认证
 
@@ -422,9 +407,3 @@ spring.jpa.hibernate.ddl-auto 用来控制 Hibernate 的 DDL 功能，
 因为 Hibernate 有可能会因为实体类和数据库表结构不一致而删除表中的数据，
 所以在生产环境中，我们需要将这个功能禁用掉，而在开发和测试阶段，
 我们可以根据需要来设置这个属性的值。
-
-### Spring Security
-
-
-
-### JWT
