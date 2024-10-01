@@ -207,6 +207,28 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.path)
   const loggedIn = localStorage.getItem('user')
   document.title = `${to.meta.title} | Thor-System`
+  // if (to.path === '/login' && loggedIn) {
+  //   window.localStorage.removeItem('user')
+  //   next('/login')
+  // } else {
+  //   let user = localStorage.getItem('user')
+  //   if (!user) {
+  //     next('/login')
+  //   } else {
+  //     // validate token and permission
+  //     // axios.get('/api/user/info').then(res => {
+  //     //   if (res.data.code === 200) {
+  //     //     next()
+  //     //   } else {
+  //     //     next('/login')
+  //     //   }
+  //     // }).catch(err => {
+  //     //   console.log(err)
+  //     //   next('/login')
+  //     // })
+  //   }
+
+  // }
   // const role = localStorage.getItem('ms_username')
   // const permission = usePermissionStore();
   if (authRequired && !loggedIn) {

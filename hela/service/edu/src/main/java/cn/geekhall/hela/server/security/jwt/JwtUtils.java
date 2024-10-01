@@ -1,6 +1,7 @@
 package cn.geekhall.hela.server.security.jwt;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +28,11 @@ import io.jsonwebtoken.*;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    // Secret key of JWT token
     @Value("${hela.app.jwtSecret}")
     private String jwtSecret;
 
+    // Expiration time of JWT token in milliseconds (1000 * 60 * 60 * 24 = 24 hours)
     @Value("${hela.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
@@ -61,6 +64,23 @@ public class JwtUtils {
     }
 
     public boolean validateJwtToken(String authToken) {
+        JwtParser jwtParser = Jwts.parser();
+        Jws<Claims> claimsJws = jwtParser.setSigningKey(jwtSecret).parseClaimsJws(authToken);
+        Claims claims = claimsJws.getBody();
+//        String username = claims.get("username", String.class);
+//        String role = claims.get("role", String.class);
+//        String id = claims.getId();
+//        String subject = claims.getSubject();
+//        Date issuedAt = claims.getIssuedAt();
+//        Date expiration = claims.getExpiration();
+//        System.out.println("id = " + id);
+//        System.out.println("subject = " + subject);
+//        System.out.println("issuedAt = " + issuedAt);
+//        System.out.println("expiration = " + expiration);
+//        System.out.println("username = " + username);
+//        System.out.println("role = " + role);
+//
+
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
@@ -80,12 +100,22 @@ public class JwtUtils {
     }
 
     public String generateTokenFromUsername(String username) {
-        return Jwts.builder()
+        String token = Jwts.builder()
+                // Header
+//                .setHeaderParam("typ", "JWT")
+//                .setHeaderParam("alg", "HS512")
+                // Payload
+//                .setId(UUID.randomUUID().toString())
+//                .claim("username", username)
+//                .claim("role", "admin")
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                // Signature
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+        System.out.println("token = " + token);
+        return token;
     }
 
     public String generateJwtToken(Authentication authentication) {

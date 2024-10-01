@@ -20,7 +20,6 @@ import '~/assets/css/icon.css'
 import App from './App.vue'
 const app = createApp(App)
 
-
 // 设置Pinia
 const pinia = createPinia()
 app.use(pinia)
@@ -29,7 +28,6 @@ app.use(pinia)
 // 各种第三方模块的设置，如Element Plus、Vue Router、Vuex等
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 setupRouter(app)  // 设置Vue-router路由
-
 
 // 设置vue-i18n
 const i18n = createI18n({
