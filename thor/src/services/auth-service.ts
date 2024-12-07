@@ -37,6 +37,7 @@ class AuthService {
           // localStorage.setItem('user', JSON.stringify(response.data))
         }
         localStorage.setItem('user', JSON.stringify(response.data))
+
         return Promise.resolve(response.data)
       }).catch(error => {
         console.log("####### auth-service.ts login() error #######");

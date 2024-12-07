@@ -1,0 +1,8 @@
+# README
+
+这个目录是用来存放Freemarker模板文件的，
+这些文件是用来给MyBatisPlusGenerator生成代码用的，
+使用时需要将此目录修改为resources，且配置好.ftl模板文件的内容。
+然后执行LokiCodeGenerator类的main方法即可生成代码。
+若不想使用Freemarker模版文件生成代码，则不能将此目录修改为resources，
+否则会自动识别为Freemarker模板文件，导致生成代码失败。
